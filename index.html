@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+      <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+      <title>Document</title>
+</head>
+<style>
+    body {
+        padding: 0;
+        margin: 0; 
+        overflow: hidden; 
+        font-family: Aeonik;
+        }
+
+    @font-face {
+        font-family: Telegraf;
+        src: url(./fonts/PPTelegraf-Regular.otf);
+    }
+
+    @font-face {
+        font-family: Aeonik;
+        src: url(./fonts/Aeonik\ Medium.ttf);
+    }
+
+    canvas { 
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+
+    .navbar{
+        z-index: 2; 
+    }
+ 
+ 
+    .navbar-percs { 
+        width: 100%;  
+        background-color: rgba(255, 255, 255, 0.202);  
+        backdrop-filter: blur(10px);  
+    }
+
+
+    .navbar-brand{
+        font-size: 1.3rem;
+        color: white;
+        font-weight: normal;
+    }
+ 
+ 
+    .navbar-percs .navbar-nav .nav-link {
+        color: white; 
+    } 
+
+    .navbar-nav .nav-link:hover {
+            color: rgba(229, 229, 229, 0.949);  
+    }
+
+    .grade-percs { 
+    width: 100%;
+    height: 100vh;
+    padding: 0px;
+    margin: 0px;
+    }
+
+    .title-p{
+        font-family: Telegraf;
+        color: white;
+        font-size: 1.5rem;
+    }
+
+    .title-sub-p{
+        font-family: Telegraf;
+        color: white;
+        font-size: 1rem;
+    }
+
+    .container-percs { 
+        display: flex;
+        justify-content: center; 
+        align-items: center;  
+        height: 100vh;  
+        flex-direction: column; 
+    }
+    .title-p,
+    .title-sub-p {
+        display: block;  
+        text-align: center;  
+    }
+
+
+        .btn-a-p {
+        margin-top: 10px;
+        font-size: .8rem !important;
+        background: none;
+        border: 1px solid #ffffff;
+        border-radius: 100px;
+        padding: 10px;
+        color: white;  
+        cursor: pointer;
+        transition: ease-in-out 1s;
+        z-index: 2;
+        }
+        .btn-a-p:hover{
+        background-color: #0f007f;
+        color: #ffffff; 
+        border: 1px solid #0f007f;
+        transition: ease-in-out 1s;
+        }
+
+
+        .custom-toggler {
+        background-color: rgba(255, 255, 255, 0);
+        border-color: rgb(255, 255, 255);
+    }
+
+    .custom-toggler .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    }
+
+      
+
+</style>
+<body> 
+
+
+    <div class="container-fluid grade-percs" id="grade-percs">
+        
+  
+ 
+        <nav class="navbar navbar-expand-lg navbar-percs">
+            <a class="navbar-brand" href="#">
+                PERCS<sup>®</sup>
+            </a>
+
+            <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+    
+
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://instagram.com/percs.lk/">Instagram</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://calendly.com/chaniru-percslk/project-meeting">Calendly</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        
+
+
+
+
+        <div class="container-percs">
+            <div class="title-p">We are coming soon...</div> 
+            <div class="title-sub-p">Till then let's book a free call?</div>
+            <a href="https://calendly.com/chaniru-percslk/project-meeting" class="btn">
+                <button class="btn-a-p">Schedule A Meeting</button>
+            </a>
+        </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+    
+
+ <canvas></canvas> 
+
+  <!-- Bootstrap JS and Popper.js are required for the responsive behavior -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+
+       
+<script>
+    var colors = new Array(
+        [0, 0, 0],  
+        [1, 2, 0],
+        [2, 12, 92],
+        [31, 19, 117]     
+    );
+
+    
+    var step = 0;
+    var colorIndices = [0, 1, 2, 3];
+    var gradientSpeed = 0.002;
+    
+    document.body.addEventListener("pointermove", (e) => {
+      const { currentTarget: el, clientX: x, clientY: y } = e;
+      const { top: t, left: l, width: w, height: h } = el.getBoundingClientRect();
+      el.style.setProperty('--posX', x - l - w / 2);
+      el.style.setProperty('--posY', y - t - h / 2);
+    });
+    
+    function updateGradient() {
+      if ($ === undefined) return;
+    
+      var c0_0 = colors[colorIndices[0]];
+      var c0_1 = colors[colorIndices[1]];
+      var c1_0 = colors[colorIndices[2]];
+      var c1_1 = colors[colorIndices[3]];
+    
+      var istep = 1 - step;
+      var r1 = Math.round(istep * c0_0[0] + step * c0_1[0]);
+      var g1 = Math.round(istep * c0_0[1] + step * c0_1[1]);
+      var b1 = Math.round(istep * c0_0[2] + step * c0_1[2]);
+      var color1 = "rgb(" + r1 + "," + g1 + "," + b1 + ")";
+    
+      var r2 = Math.round(istep * c1_0[0] + step * c1_1[0]);
+      var g2 = Math.round(istep * c1_0[1] + step * c1_1[1]);
+      var b2 = Math.round(istep * c1_0[2] + step * c1_1[2]);
+      var color2 = "rgb(" + r2 + "," + g2 + "," + b2 + ")";
+    
+      $('#grade-percs').css({
+        background: "-webkit-gradient(linear, left top, right top, from(" + color1 + "), to(" + color2 + "))"
+      }).css({
+        background: "-moz-linear-gradient(left, " + color1 + " 0%, " + color2 + " 100%)"
+      });
+    
+      step += gradientSpeed;
+      if (step >= 1) {
+        step %= 1;
+        colorIndices[0] = colorIndices[1];
+        colorIndices[2] = colorIndices[3];
+    
+        colorIndices[1] = (colorIndices[1] + Math.floor(1 + Math.random() * (colors.length - 1))) % colors.length;
+        colorIndices[3] = (colorIndices[3] + Math.floor(1 + Math.random() * (colors.length - 1))) % colors.length;
+      }
+    }
+    
+    setInterval(updateGradient, 10);
+    </script>
+<script>
+    const canvas = document.querySelector("canvas");
+const ctx = canvas.getContext('2d');
+
+// for intro motion
+let mouseMoved = false;
+
+const pointer = {
+    x: .5 * window.innerWidth,
+    y: .5 * window.innerHeight,
+}
+const params = {
+    pointsNumber: 40,
+    widthFactor: .3,
+    mouseThreshold: .6,
+    spring: .4,
+    friction: .5
+};
+
+const trail = new Array(params.pointsNumber);
+for (let i = 0; i < params.pointsNumber; i++) {
+    trail[i] = {
+        x: pointer.x,
+        y: pointer.y,
+        dx: 0,
+        dy: 0,
+    }
+}
+
+window.addEventListener("click", e => {
+    updateMousePosition(e.pageX, e.pageY);
+});
+window.addEventListener("mousemove", e => {
+    mouseMoved = true;
+    updateMousePosition(e.pageX, e.pageY);
+});
+window.addEventListener("touchmove", e => {
+    mouseMoved = true;
+    updateMousePosition(e.targetTouches[0].pageX, e.targetTouches[0].pageY);
+});
+
+function updateMousePosition(eX, eY) {
+    pointer.x = eX;
+    pointer.y = eY;
+}
+
+setupCanvas();
+update(0);
+window.addEventListener("resize", setupCanvas);
+
+
+function update(t) {
+
+    ctx.strokeStyle = 'white';
+
+    // for intro motion
+    if (!mouseMoved) {
+        pointer.x = (.5 + .3 * Math.cos(.002 * t) * (Math.sin(.005 * t))) * window.innerWidth;
+        pointer.y = (.5 + .2 * (Math.cos(.005 * t)) + .1 * Math.cos(.01 * t)) * window.innerHeight;
+    }
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    trail.forEach((p, pIdx) => {
+        const prev = pIdx === 0 ? pointer : trail[pIdx - 1];
+        const spring = pIdx === 0 ? .4 * params.spring : params.spring;
+        p.dx += (prev.x - p.x) * spring;
+        p.dy += (prev.y - p.y) * spring;
+        p.dx *= params.friction;
+        p.dy *= params.friction;
+        p.x += p.dx;
+        p.y += p.dy;
+    });
+
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(trail[0].x, trail[0].y);
+
+    for (let i = 1; i < trail.length - 1; i++) {
+        const xc = .5 * (trail[i].x + trail[i + 1].x);
+        const yc = .5 * (trail[i].y + trail[i + 1].y);
+        ctx.quadraticCurveTo(trail[i].x, trail[i].y, xc, yc);
+        ctx.lineWidth = params.widthFactor * (params.pointsNumber - i);
+        ctx.stroke();
+    }
+    ctx.lineTo(trail[trail.length - 1].x, trail[trail.length - 1].y);
+    ctx.stroke();
+
+    window.requestAnimationFrame(update);
+}
+
+function setupCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+</script>
+</body>
+</html>
